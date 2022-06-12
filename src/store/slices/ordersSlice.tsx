@@ -2,17 +2,21 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authLogin from "../../api/auth/login";
 import orderCreate from "../../api/order/create";
 import orderGetAll from "../../api/order/getAll";
-import { IOrder } from "../../models/order.model";
+import orderGetById from "../../api/order/getById";
+import orderUpdate, { IUpdateOrderBody } from "../../api/order/update";
+import { IOrder, ISelectedOrder } from "../../models/order.model";
 import { OrderFormValues } from "../../views/OrderForm/order-form-types";
 import { AppThunk } from "../store";
 import { showLoader, hideLoader } from "./generalSlice";
 
 export interface IOrdersState {
   orders: IOrder[];
+  selectedOrder: ISelectedOrder | null;
 }
 
 const initialState: IOrdersState = {
   orders: [],
+  selectedOrder: null,
 };
 
 export const getAllOrdersThunk = createAsyncThunk(
@@ -50,6 +54,38 @@ export const createOrderThunk = createAsyncThunk(
   }
 );
 
+export const updateOrderThunk = createAsyncThunk(
+  "users/updateOrderThunk",
+  async (updateOrderBody: IUpdateOrderBody, { dispatch }) => {
+    try {
+      dispatch(showLoader({ action: "updateOrder" }));
+      const data = await orderUpdate(updateOrderBody);
+      dispatch(hideLoader({ action: "updateOrder" }));
+      return data;
+    } catch (e) {
+      dispatch(hideLoader({ action: "updateOrder" }));
+      console.log(e);
+      throw e;
+    }
+  }
+);
+
+export const getOrderByIdThunk = createAsyncThunk(
+  "users/getOrderByIdThunk",
+  async (orderId: string, { dispatch }) => {
+    try {
+      dispatch(showLoader({ action: "getOrderById" }));
+      const order = await orderGetById(orderId);
+      dispatch(hideLoader({ action: "getOrderById" }));
+      return order;
+    } catch (e) {
+      dispatch(hideLoader({ action: "getOrderById" }));
+      console.log(e);
+      throw e;
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -70,6 +106,19 @@ const ordersSlice = createSlice({
       createOrderThunk.fulfilled,
       (state, action: PayloadAction<IOrder>) => {
         state.orders = state.orders.concat([action.payload]);
+      }
+    );
+
+    builder.addCase(
+      updateOrderThunk.fulfilled,
+      (state, action: PayloadAction<IOrder>) => {
+        state.selectedOrder = null;
+      }
+    );
+    builder.addCase(
+      getOrderByIdThunk.fulfilled,
+      (state, action: PayloadAction<ISelectedOrder>) => {
+        state.selectedOrder = action.payload;
       }
     );
   },

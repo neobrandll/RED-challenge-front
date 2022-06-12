@@ -8,7 +8,7 @@ const AppRoutes = () => {
     <Switch>
       <Route exact path="/orders" component={Dashboard} />
       <Route exact path="/orders/create" component={OrderForm} />
-      <Route exact path="/orders/edit" component={Home} />
+      <Route exact path="/orders/edit/:id" component={OrderForm} />
       <Route exact path="/orders/delete" component={Home} />
       {/* <Route path="/" component={Home} /> */}
       <Route path="/" render={() => <Redirect to="/orders" />} />

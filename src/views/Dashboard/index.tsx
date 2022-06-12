@@ -50,12 +50,19 @@ const Dashboard: React.FC = () => {
     history.push("/orders/create");
   };
 
+  const onEditHandler = (id: string) => {
+    history.push(`/orders/edit/${id}`);
+  };
+
   return (
     <Page headerTitle={"Dashboard"}>
       <>
         {orders && !!orders.length && (
           <EnhancedTable
-            toolbarProps={{ onCreate: onCreateHandler }}
+            toolbarProps={{
+              onCreate: onCreateHandler,
+              onEdit: onEditHandler,
+            }}
             rows={orders}
           />
         )}

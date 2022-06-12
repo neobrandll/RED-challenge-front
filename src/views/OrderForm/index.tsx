@@ -16,13 +16,13 @@ import {
   Select,
 } from "@material-ui/core";
 import { Copyright } from "@material-ui/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "@material-ui/core/Link";
 import Page from "../../components/Page";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useForm, Controller } from "react-hook-form";
 import { arePasswordsEqual, onKeyDown } from "../../utils/utility";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerThunk } from "../../store/slices/userSlice";
 import { AppDispatch } from "../../store/store";
 import { useHistory, useParams } from "react-router-dom";
@@ -31,7 +31,12 @@ import { errorMessages } from "../../constants/errorMessages";
 import { OrderFormValues } from "./order-form-types";
 import { OrderType } from "../../models/order.model";
 import { ORDER_TYPES } from "../../constants/orders";
-import { createOrderThunk } from "../../store/slices/ordersSlice";
+import {
+  createOrderThunk,
+  getOrderByIdThunk,
+  updateOrderThunk,
+} from "../../store/slices/ordersSlice";
+import { RootState } from "../../store/rootReducer";
 
 const OrderForm: React.FC = () => {
   const classes = useStyles();
@@ -39,12 +44,19 @@ const OrderForm: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id?: string }>();
 
+  const selectedOrder = useSelector(
+    (state: RootState) => state.orders.selectedOrder
+  );
+
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState,
     getValues,
+    setValue,
     watch,
+    trigger,
+    reset,
   } = useForm<OrderFormValues>({
     defaultValues: {
       orderType: OrderType.Standard,
@@ -53,23 +65,35 @@ const OrderForm: React.FC = () => {
     reValidateMode: "onChange",
   });
 
-  const test = () => {
-    console.log(getValues());
-    console.log(isValid);
-  };
+  const { errors, isValid, isDirty } = formState;
 
-  const handleRegister = (data: OrderFormValues) => {
-    console.log("here");
-    console.log(isValid);
-    console.log(errors);
-    if (isValid) {
+  const onSubmitForm = (data: OrderFormValues) => {
+    if (!isValid) return;
+    if (!id) {
       dispatch(createOrderThunk(data)).then(() => {
+        history.push("/");
+      });
+    } else {
+      dispatch(updateOrderThunk({ ...data, orderId: +id })).then(() => {
         history.push("/");
       });
     }
   };
 
   const orderType = id ? "Update Order" : "Create Order";
+
+  useEffect(() => {
+    if (id) dispatch(getOrderByIdThunk(id));
+  }, [id]);
+
+  useEffect(() => {
+    if (id && id.toString() === selectedOrder?.orderId.toString()) {
+      reset({
+        orderType: selectedOrder.orderType,
+        customerName: selectedOrder.customerName,
+      });
+    }
+  }, [id, selectedOrder]);
 
   return (
     <Page headerTitle={orderType}>
@@ -101,6 +125,7 @@ const OrderForm: React.FC = () => {
                   label="Customer"
                   error={!!error}
                   helperText={error?.type ? errorMessages?.[error.type] : ""}
+                  value={value}
                   name={name}
                   ref={ref}
                   onChange={onChange}
@@ -149,7 +174,7 @@ const OrderForm: React.FC = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleSubmit(handleRegister)}
+              onClick={handleSubmit(onSubmitForm)}
             >
               {id ? "Update" : "Create"}
             </Button>

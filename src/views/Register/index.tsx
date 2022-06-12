@@ -86,6 +86,7 @@ const Register: React.FC = () => {
                   name={name}
                   ref={ref}
                   onChange={onChange}
+                  value={value}
                   autoFocus
                 />
               )}
@@ -111,6 +112,7 @@ const Register: React.FC = () => {
                   name={name}
                   ref={ref}
                   onChange={onChange}
+                  value={value}
                   autoFocus
                 />
               )}
@@ -137,6 +139,7 @@ const Register: React.FC = () => {
                   name={name}
                   ref={ref}
                   onChange={onChange}
+                  value={value}
                   autoFocus
                 />
               )}
@@ -170,6 +173,7 @@ const Register: React.FC = () => {
                   fullWidth
                   ref={ref}
                   autoFocus
+                  value={value}
                 />
               )}
             />

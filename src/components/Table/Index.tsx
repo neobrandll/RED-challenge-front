@@ -93,6 +93,8 @@ export const headCells: HeadCell[] = [
 interface IToolbarProps {
   children?: JSX.Element | JSX.Element[];
   onCreate?: () => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string[]) => void;
 }
 
 interface EnhancedTableProps {
@@ -179,7 +181,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar {...toolbarProps} numSelected={selected.length} />
+        <EnhancedTableToolbar {...toolbarProps} selected={selected} />
         <TableContainer>
           <Table
             className={classes.table}

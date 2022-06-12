@@ -78,6 +78,7 @@ const Login: React.FC = () => {
                   error={!!error}
                   helperText={error?.type ? errorMessages?.[error.type] : ""}
                   name={name}
+                  value={value}
                   ref={ref}
                   onChange={onChange}
                   autoFocus
@@ -99,6 +100,7 @@ const Login: React.FC = () => {
                   required
                   fullWidth
                   id="password"
+                  value={value}
                   label="Password"
                   error={!!error}
                   helperText={error?.type ? errorMessages?.[error.type] : ""}
