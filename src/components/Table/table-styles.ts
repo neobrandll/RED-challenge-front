@@ -17,7 +17,17 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
             backgroundColor: theme.palette.secondary.dark,
           },
     title: {
-      flex: "1 1 100%",
+      "&.MuiTypography-root": {
+        marginRight: theme.spacing(10),
+      },
+    },
+    createBtn: {
+      flex: 1,
+      display: "flex",
+      justifyContent: "flex-end",
+    },
+    hidden: {
+      display: "none",
     },
   })
 );
@@ -44,6 +54,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       position: "absolute",
       top: 20,
       width: 1,
+    },
+  })
+);
+
+export const useTableFilterStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      flexGrow: 1,
+    },
+    formControl: {
+      // marginTop: theme.spacing(1),
+      minWidth: 120,
+    },
+    orderType: {
+      width: 200,
     },
   })
 );

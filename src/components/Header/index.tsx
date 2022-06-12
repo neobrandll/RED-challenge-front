@@ -57,7 +57,7 @@ export default function Header(props: IProps) {
             onClick={onLogoutHandler}
             className={classes.link}
           >
-            Logout
+            Log out
           </Button>
         )}
       </div>

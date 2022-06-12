@@ -1,10 +1,17 @@
-import { Toolbar, Typography, Tooltip, IconButton } from "@material-ui/core";
+import {
+  Toolbar,
+  Typography,
+  Tooltip,
+  IconButton,
+  Grid,
+} from "@material-ui/core";
 import { useToolbarStyles } from "./table-styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 
 import clsx from "clsx";
+import TableFilters from "./TableFilters";
 
 interface EnhancedTableToolbarProps {
   selected: number[];
@@ -78,26 +85,40 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         [classes.highlight]: numSelected > 0,
       })}
     >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
+      <Grid container alignItems="center">
+        <Grid item>
+          {numSelected > 0 ? (
+            <Typography
+              className={classes.title}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {numSelected} selected
+            </Typography>
+          ) : (
+            <Typography
+              className={classes.title}
+              variant="h6"
+              id="tableTitle"
+              component="div"
+            >
+              Orders
+            </Typography>
+          )}
+        </Grid>
+        <Grid
+          className={clsx({
+            [classes.hidden]: numSelected > 0,
+          })}
+          item
         >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          className={classes.title}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Orders
-        </Typography>
-      )}
-      {buttons}
+          <TableFilters />
+        </Grid>
+        <Grid className={classes.createBtn} item>
+          {buttons}
+        </Grid>
+      </Grid>
     </Toolbar>
   );
 };
