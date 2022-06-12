@@ -7,11 +7,11 @@ export enum OrderType {
 }
 
 export interface IOrder {
-  OrderId: number;
-  OrderType: OrderType;
-  CustomerName: string;
-  CreatedDate: Date;
-  CreatedByUserName: string;
+  orderId: string;
+  orderType: string;
+  customerName: string;
+  createdDate: string;
+  createdByUserName: string;
 }
 
 export interface IOrderSearch {
