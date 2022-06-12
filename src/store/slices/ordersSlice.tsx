@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authLogin from "../../api/auth/login";
 import orderCreate from "../../api/order/create";
+import orderDelete from "../../api/order/delete";
 import orderGetAll from "../../api/order/getAll";
 import orderGetById from "../../api/order/getById";
 import orderUpdate, { IUpdateOrderBody } from "../../api/order/update";
@@ -29,6 +30,22 @@ export const getAllOrdersThunk = createAsyncThunk(
       return data;
     } catch (e) {
       dispatch(hideLoader({ action: "getAllOrders" }));
+      console.log(e);
+      throw e;
+    }
+  }
+);
+
+export const deleteOrdersThunk = createAsyncThunk(
+  "users/deleteOrdersThunk",
+  async (ids: number[], { dispatch }) => {
+    try {
+      dispatch(showLoader({ action: "deleteOrders" }));
+      const data = await orderDelete({ ids });
+      dispatch(hideLoader({ action: "deleteOrders" }));
+      return ids;
+    } catch (e) {
+      dispatch(hideLoader({ action: "deleteOrders" }));
       console.log(e);
       throw e;
     }
@@ -106,6 +123,25 @@ const ordersSlice = createSlice({
       createOrderThunk.fulfilled,
       (state, action: PayloadAction<IOrder>) => {
         state.orders = state.orders.concat([action.payload]);
+      }
+    );
+
+    // builder.addCase(
+    //   deleteOrdersThunk.fulfilled,
+    //   (state, action: PayloadAction<string[]>) => {
+    //     state.orders = state.orders.filter((order) =>
+    //       payload.action.includes(order.orderId)
+    //     );
+    //   }
+    // );
+
+    builder.addCase(
+      deleteOrdersThunk.fulfilled,
+      (state, action: PayloadAction<number[]>) => {
+        console.log(action.payload);
+        state.orders = state.orders.filter(
+          (order) => !action.payload.includes(+order.orderId)
+        );
       }
     );
 

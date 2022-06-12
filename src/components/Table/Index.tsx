@@ -93,8 +93,8 @@ export const headCells: HeadCell[] = [
 interface IToolbarProps {
   children?: JSX.Element | JSX.Element[];
   onCreate?: () => void;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string[]) => void;
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number[]) => void;
 }
 
 interface EnhancedTableProps {
@@ -117,7 +117,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof IOrder>("orderId");
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -133,16 +133,16 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
 
   const handleSelectAllClick = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.orderId);
+      const newSelecteds = rows.map((n) => +n.orderId);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+  const handleClick = (event: React.MouseEvent<unknown>, name: number) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: string[] = [];
+    let newSelected: number[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -173,7 +173,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (name: number) => selected.includes(name);
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -202,13 +202,13 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.orderId);
+                  const isItemSelected = isSelected(+row.orderId);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.orderId)}
+                      onClick={(event) => handleClick(event, +row.orderId)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

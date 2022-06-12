@@ -7,11 +7,11 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import clsx from "clsx";
 
 interface EnhancedTableToolbarProps {
-  selected: string[];
+  selected: number[];
   children?: JSX.Element | JSX.Element[];
   onCreate?: () => void;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string[]) => void;
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number[]) => void;
 }
 
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {

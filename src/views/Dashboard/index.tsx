@@ -15,7 +15,10 @@ import { useHistory } from "react-router-dom";
 import Page from "../../components/Page";
 import EnhancedTable from "../../components/Table/Index";
 import { RootState } from "../../store/rootReducer";
-import { getAllOrdersThunk } from "../../store/slices/ordersSlice";
+import {
+  deleteOrdersThunk,
+  getAllOrdersThunk,
+} from "../../store/slices/ordersSlice";
 import { AppDispatch } from "../../store/store";
 import useStyles from "./dashboard-styles";
 
@@ -50,8 +53,12 @@ const Dashboard: React.FC = () => {
     history.push("/orders/create");
   };
 
-  const onEditHandler = (id: string) => {
+  const onEditHandler = (id: number) => {
     history.push(`/orders/edit/${id}`);
+  };
+
+  const onDeleteHandler = (ids: number[]) => {
+    dispatch(deleteOrdersThunk(ids));
   };
 
   return (
@@ -62,6 +69,7 @@ const Dashboard: React.FC = () => {
             toolbarProps={{
               onCreate: onCreateHandler,
               onEdit: onEditHandler,
+              onDelete: onDeleteHandler,
             }}
             rows={orders}
           />

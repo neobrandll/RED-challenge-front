@@ -1,12 +1,12 @@
 import API from "..";
 
 export interface IDeleteParams {
-  id: string;
+  ids: number[];
 }
 
 const orderDelete = async (deleteParams: IDeleteParams): Promise<void> => {
   const { data } = await API.delete<void>("/Order", {
-    params: deleteParams,
+    data: deleteParams.ids,
     withCredentials: true,
   });
   return data;
