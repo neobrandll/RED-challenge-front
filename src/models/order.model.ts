@@ -21,6 +21,7 @@ export interface ISelectedOrder {
 }
 
 export interface IOrderSearch {
-  customerName: string;
-  orderType: OrderType;
+  customerName?: string;
+  orderType?: OrderType;
+  orderId?: number;
 }

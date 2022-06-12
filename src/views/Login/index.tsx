@@ -45,6 +45,7 @@ const Login: React.FC = () => {
   });
 
   const handleLogin = (data: FormLoginValues) => {
+    if (Object.keys(errors).length) return;
     dispatch(loginThunk(data));
   };
 

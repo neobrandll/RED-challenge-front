@@ -4,8 +4,9 @@ import orderCreate from "../../api/order/create";
 import orderDelete from "../../api/order/delete";
 import orderGetAll from "../../api/order/getAll";
 import orderGetById from "../../api/order/getById";
+import orderSearch from "../../api/order/search";
 import orderUpdate, { IUpdateOrderBody } from "../../api/order/update";
-import { IOrder, ISelectedOrder } from "../../models/order.model";
+import { IOrder, IOrderSearch, ISelectedOrder } from "../../models/order.model";
 import { OrderFormValues } from "../../views/OrderForm/order-form-types";
 import { AppThunk } from "../store";
 import { showLoader, hideLoader } from "./generalSlice";
@@ -30,6 +31,22 @@ export const getAllOrdersThunk = createAsyncThunk(
       return data;
     } catch (e) {
       dispatch(hideLoader({ action: "getAllOrders" }));
+      console.log(e);
+      throw e;
+    }
+  }
+);
+
+export const searchOrdersThunk = createAsyncThunk(
+  "users/searchOrdersThunk",
+  async (searchQuery: IOrderSearch, { dispatch }) => {
+    try {
+      dispatch(showLoader({ action: "searchOrders" }));
+      const data = await orderSearch(searchQuery);
+      dispatch(hideLoader({ action: "searchOrders" }));
+      return data;
+    } catch (e) {
+      dispatch(hideLoader({ action: "searchOrders" }));
       console.log(e);
       throw e;
     }

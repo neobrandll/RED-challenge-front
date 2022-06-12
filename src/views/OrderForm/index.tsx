@@ -62,13 +62,13 @@ const OrderForm: React.FC = () => {
       orderType: OrderType.Standard,
       customerName: "",
     },
-    reValidateMode: "onChange",
+    reValidateMode: "onSubmit",
   });
 
   const { errors, isValid, isDirty } = formState;
 
   const onSubmitForm = (data: OrderFormValues) => {
-    if (!isValid) return;
+    if (Object.keys(errors).length) return;
     if (!id) {
       dispatch(createOrderThunk(data)).then(() => {
         history.push("/");

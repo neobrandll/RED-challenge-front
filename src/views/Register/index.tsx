@@ -50,7 +50,8 @@ const Register: React.FC = () => {
   const password = watch("password");
 
   const handleRegister = (data: FormRegisterValues) => {
-    if (isValid) dispatch(registerThunk(data));
+    if (Object.keys(errors).length) return;
+    dispatch(registerThunk(data));
   };
 
   return (
