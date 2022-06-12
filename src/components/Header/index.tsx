@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import { logout } from "../../store/slices/userSlice";
 import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 interface IProps {
   label: string;
@@ -42,6 +43,9 @@ export default function Header(props: IProps) {
         alt="logo"
         style={{ marginRight: "16px" }}
       />
+      <Helmet>
+        <title>{label}</title>
+      </Helmet>
       <span className="headerFont" style={{ color: colors.brandDarkGray }}>
         {label}
       </span>
