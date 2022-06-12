@@ -12,6 +12,7 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 
 import clsx from "clsx";
 import TableFilters from "./TableFilters";
+import { IOrderSearch } from "../../models/order.model";
 
 interface EnhancedTableToolbarProps {
   selected: number[];
@@ -19,6 +20,7 @@ interface EnhancedTableToolbarProps {
   onCreate?: () => void;
   onEdit?: (id: number) => void;
   onDelete?: (id: number[]) => void;
+  onSearch?: (searchQuery: IOrderSearch) => void;
 }
 
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
@@ -113,7 +115,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           })}
           item
         >
-          <TableFilters />
+          <TableFilters onSearch={props.onSearch} />
         </Grid>
         <Grid className={classes.createBtn} item>
           {buttons}

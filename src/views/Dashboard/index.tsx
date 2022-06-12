@@ -14,10 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Page from "../../components/Page";
 import EnhancedTable from "../../components/Table/Index";
+import { IOrderSearch } from "../../models/order.model";
 import { RootState } from "../../store/rootReducer";
 import {
   deleteOrdersThunk,
   getAllOrdersThunk,
+  searchOrdersThunk,
 } from "../../store/slices/ordersSlice";
 import { AppDispatch } from "../../store/store";
 import useStyles from "./dashboard-styles";
@@ -61,6 +63,10 @@ const Dashboard: React.FC = () => {
     dispatch(deleteOrdersThunk(ids));
   };
 
+  const onSearchHandler = (searchQuery: IOrderSearch) => {
+    dispatch(searchOrdersThunk(searchQuery));
+  };
+
   return (
     <Page headerTitle={"Dashboard"}>
       <>
@@ -70,6 +76,7 @@ const Dashboard: React.FC = () => {
               onCreate: onCreateHandler,
               onEdit: onEditHandler,
               onDelete: onDeleteHandler,
+              onSearch: onSearchHandler,
             }}
             rows={orders}
           />

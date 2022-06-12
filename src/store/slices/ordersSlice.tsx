@@ -137,6 +137,13 @@ const ordersSlice = createSlice({
     );
 
     builder.addCase(
+      searchOrdersThunk.fulfilled,
+      (state, action: PayloadAction<IOrdersState["orders"]>) => {
+        state.orders = action.payload;
+      }
+    );
+
+    builder.addCase(
       createOrderThunk.fulfilled,
       (state, action: PayloadAction<IOrder>) => {
         state.orders = state.orders.concat([action.payload]);

@@ -13,11 +13,18 @@ import { Clear } from "@material-ui/icons";
 import classNames from "classnames";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { errorMessages } from "../../constants/errorMessages";
 import { ORDER_TYPES } from "../../constants/orders";
-import { OrderType } from "../../models/order.model";
+import { IOrderSearch, OrderType } from "../../models/order.model";
+import { searchOrdersThunk } from "../../store/slices/ordersSlice";
+import { AppDispatch } from "../../store/store";
 import { useTableFilterStyles } from "./table-styles";
 import { IFilterData } from "./table-types";
+
+interface ITableFilter {
+  onSearch?: (searchQuery: IOrderSearch) => void;
+}
 
 const getDefaultValues = (): IFilterData => ({
   customerName: "",
@@ -25,8 +32,9 @@ const getDefaultValues = (): IFilterData => ({
   orderType: "",
 });
 
-const TableFilters: React.FC = () => {
+const TableFilters: React.FC<ITableFilter> = () => {
   const classes = useTableFilterStyles();
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     handleSubmit,
@@ -40,6 +48,16 @@ const TableFilters: React.FC = () => {
   });
   const onClearFilters = () => {
     reset(getDefaultValues());
+  };
+
+  const onSubmit = (data: IFilterData) => {
+    if (Object.keys(errors).length) return;
+    let query: IOrderSearch = {};
+    if (data.customerName) query.customerName = data.customerName;
+    if (data.orderId) query.orderId = +data.orderId;
+    if (data.orderType !== "") query.orderType = data.orderType;
+
+    dispatch(searchOrdersThunk(query));
   };
 
   return (
@@ -57,6 +75,7 @@ const TableFilters: React.FC = () => {
               variant="outlined"
               id="searchOrderId"
               label="Order ID"
+              type="number"
               error={!!error}
               helperText={error?.type ? errorMessages?.[error.type] : ""}
               value={value}
@@ -132,7 +151,11 @@ const TableFilters: React.FC = () => {
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="contained" color="primary">
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          variant="contained"
+          color="primary"
+        >
           Search
         </Button>
       </Grid>

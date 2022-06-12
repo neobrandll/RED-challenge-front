@@ -11,7 +11,7 @@ import {
 import { useState, ChangeEvent } from "react";
 import { useStyles } from "./table-styles";
 import Switch from "@material-ui/core/Switch";
-import { IOrder } from "../../models/order.model";
+import { IOrder, IOrderSearch } from "../../models/order.model";
 import EnhancedTableHead from "./TableHead";
 import EnhancedTableToolbar from "./TableToolbar";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -95,6 +95,7 @@ interface IToolbarProps {
   onCreate?: () => void;
   onEdit?: (id: number) => void;
   onDelete?: (id: number[]) => void;
+  onSearch?: (searchQuery: IOrderSearch) => void;
 }
 
 interface EnhancedTableProps {
