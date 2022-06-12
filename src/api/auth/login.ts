@@ -1,12 +1,16 @@
-import API from '..';
+import { AxiosResponse } from "axios";
+import API from "..";
+import { IUser } from "../../models/user.model";
 
-interface ILoginBody {
+export interface ILoginBody {
   userName: string;
   password: string;
 }
 
-const authLogin = async (loginBody: ILoginBody): Promise<void> => {
-  const { data } = await API.post<void>('/Login', loginBody);
+const authLogin = async (loginBody: ILoginBody): Promise<IUser> => {
+  const { data } = await API.post<IUser>("/Login", loginBody, {
+    withCredentials: true,
+  });
   return data;
 };
 

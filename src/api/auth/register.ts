@@ -1,14 +1,15 @@
-import API from '..';
+import API from "..";
+import { IUser } from "../../models/user.model";
 
-interface IRegisterBody {
-        userName: string,
-        password: string,
-        repeatPasswordConfirmation: string,
-        email: string
+export interface IRegisterBody {
+  userName: string;
+  password: string;
+  repeatPasswordConfirmation: string;
+  email: string;
 }
 
-const authRegister = async (registerBody: IRegisterBody): Promise<void> => {
-  const { data } = await API.post<void>('/Register', registerBody);
+const authRegister = async (registerBody: IRegisterBody): Promise<IUser> => {
+  const { data } = await API.post<IUser>("/Register", registerBody);
   return data;
 };
 

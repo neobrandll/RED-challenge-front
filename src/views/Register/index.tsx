@@ -17,16 +17,16 @@ import Link from "@material-ui/core/Link";
 import Page from "../../components/Page";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useForm, Controller } from "react-hook-form";
-import { FormLoginValues } from "./login-types";
-import { onKeyDown } from "../../utils/utility";
+import { FormRegisterValues } from "./register-types";
+import { arePasswordsEqual, onKeyDown } from "../../utils/utility";
 import { useDispatch } from "react-redux";
-import { loginThunk } from "../../store/slices/userSlice";
+import { registerThunk } from "../../store/slices/userSlice";
 import { AppDispatch } from "../../store/store";
 import { useHistory } from "react-router-dom";
-import useStyles from "./login-styles";
+import useStyles from "./register-styles";
 import { errorMessages } from "../../constants/errorMessages";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
@@ -34,22 +34,27 @@ const Login: React.FC = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     getValues,
-  } = useForm<FormLoginValues>({
+    watch,
+  } = useForm<FormRegisterValues>({
     defaultValues: {
       userName: "",
       password: "",
+      repeatPasswordConfirmation: "",
+      email: "",
     },
-    reValidateMode: "onSubmit",
+    reValidateMode: "onChange",
   });
 
-  const handleLogin = (data: FormLoginValues) => {
-    dispatch(loginThunk(data));
+  const password = watch("password");
+
+  const handleRegister = (data: FormRegisterValues) => {
+    if (isValid) dispatch(registerThunk(data));
   };
 
   return (
-    <Page headerTitle={"Sign in"}>
+    <Page headerTitle={"Sign up"}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -57,12 +62,13 @@ const Login: React.FC = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <form className={classes.form} noValidate>
             <Controller
               control={control}
               name="userName"
+              rules={{ required: true }}
               render={({
                 field: { onChange, onBlur, value, name, ref },
                 fieldState: { error },
@@ -86,7 +92,33 @@ const Login: React.FC = () => {
             />
             <Controller
               control={control}
+              name="email"
+              rules={{ required: true }}
+              render={({
+                field: { onChange, onBlur, value, name, ref },
+                fieldState: { error },
+                formState,
+              }) => (
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  error={!!error}
+                  helperText={error?.type ? errorMessages?.[error.type] : ""}
+                  name={name}
+                  ref={ref}
+                  onChange={onChange}
+                  autoFocus
+                />
+              )}
+            />
+            <Controller
+              control={control}
               name="password"
+              rules={{ required: true }}
               render={({
                 field: { onChange, onBlur, value, name, ref },
                 fieldState: { error },
@@ -109,47 +141,58 @@ const Login: React.FC = () => {
                 />
               )}
             />
-            {/* <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoFocus
-            /> */}
-            {/* <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            /> */}
+            <Controller
+              control={control}
+              name="repeatPasswordConfirmation"
+              rules={{
+                required: true,
+                validate: {
+                  arePasswordsEqual: (repeatedPassword: string) =>
+                    arePasswordsEqual(password, repeatedPassword),
+                },
+              }}
+              render={({
+                field: { onChange, onBlur, value, name, ref },
+                fieldState: { error },
+                formState,
+              }) => (
+                <TextField
+                  onChange={onChange}
+                  type="password"
+                  error={!!error}
+                  helperText={error?.type ? errorMessages?.[error.type] : ""}
+                  name={name}
+                  id="repeatPasswordConfirmation"
+                  label="Confirm Password"
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  ref={ref}
+                  autoFocus
+                />
+              )}
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleSubmit(handleLogin)}
+              onClick={handleSubmit(handleRegister)}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
               <Grid item>
                 <Link
-                  onClick={() => {
-                    history.push("/register");
-                  }}
                   className={classes.link}
+                  onClick={() => {
+                    history.push("/");
+                  }}
                   variant="body2"
                 >
-                  {"Don't have an account? Sign Up"}
+                  {"Already have an account? Sign in"}
                 </Link>
               </Grid>
             </Grid>
@@ -160,4 +203,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

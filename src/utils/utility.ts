@@ -11,4 +11,8 @@ const onKeyDown = (
   }
 };
 
-export { onKeyDown };
+const arePasswordsEqual = (password: string, repeatedPassword: string) => {
+  return password === repeatedPassword;
+};
+
+export { onKeyDown, arePasswordsEqual };
