@@ -9,7 +9,9 @@ export interface IRegisterBody {
 }
 
 const authRegister = async (registerBody: IRegisterBody): Promise<IUser> => {
-  const { data } = await API.post<IUser>("/Register", registerBody);
+  const { data } = await API.post<IUser>("/Register", registerBody, {
+    withCredentials: true,
+  });
   return data;
 };
 

@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authLogin from "../../api/auth/login";
+import orderCreate from "../../api/order/create";
 import orderGetAll from "../../api/order/getAll";
 import { IOrder } from "../../models/order.model";
+import { OrderFormValues } from "../../views/OrderForm/order-form-types";
 import { AppThunk } from "../store";
 import { showLoader, hideLoader } from "./generalSlice";
 
@@ -29,6 +31,25 @@ export const getAllOrdersThunk = createAsyncThunk(
   }
 );
 
+export const createOrderThunk = createAsyncThunk(
+  "users/createOrderThunk",
+  async (createOrderBody: OrderFormValues, { dispatch }) => {
+    try {
+      dispatch(showLoader({ action: "createOrder" }));
+      const data = await orderCreate({
+        ...createOrderBody,
+        createdDate: new Date(),
+      });
+      dispatch(hideLoader({ action: "createOrder" }));
+      return data;
+    } catch (e) {
+      dispatch(hideLoader({ action: "createOrder" }));
+      console.log(e);
+      throw e;
+    }
+  }
+);
+
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
@@ -42,6 +63,13 @@ const ordersSlice = createSlice({
       getAllOrdersThunk.fulfilled,
       (state, action: PayloadAction<IOrdersState["orders"]>) => {
         state.orders = action.payload;
+      }
+    );
+
+    builder.addCase(
+      createOrderThunk.fulfilled,
+      (state, action: PayloadAction<IOrder>) => {
+        state.orders = state.orders.concat([action.payload]);
       }
     );
   },

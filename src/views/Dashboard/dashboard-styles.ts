@@ -4,6 +4,9 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  link: {
+    cursor: "pointer",
+  },
 });
 
 export default useStyles;

@@ -1,16 +1,19 @@
 import { Toolbar, Typography, Tooltip, IconButton } from "@material-ui/core";
 import { useToolbarStyles } from "./table-styles";
 import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+
 import clsx from "clsx";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  children?: JSX.Element | JSX.Element[];
+  onCreate?: () => void;
 }
 
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, children, onCreate } = props;
 
   return (
     <Toolbar
@@ -45,9 +48,11 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
+          <>
+            <IconButton onClick={onCreate} aria-label="creaate">
+              <AddBoxIcon />
+            </IconButton>
+          </>
         </Tooltip>
       )}
     </Toolbar>

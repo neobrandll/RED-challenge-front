@@ -90,8 +90,14 @@ export const headCells: HeadCell[] = [
   },
 ];
 
+interface IToolbarProps {
+  children?: JSX.Element | JSX.Element[];
+  onCreate?: () => void;
+}
+
 interface EnhancedTableProps {
   rows: IOrder[];
+  toolbarProps?: IToolbarProps;
   //   classes: ReturnType<typeof useStyles>;
   //   numSelected: number;
   //   onRequestSort: (
@@ -105,7 +111,7 @@ interface EnhancedTableProps {
 }
 
 const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
-  const { rows } = props;
+  const { rows, toolbarProps } = props;
   const classes = useStyles();
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof IOrder>("orderId");
@@ -173,7 +179,7 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar {...toolbarProps} numSelected={selected.length} />
         <TableContainer>
           <Table
             className={classes.table}
