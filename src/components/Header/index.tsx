@@ -50,7 +50,7 @@ export default function Header(props: IProps) {
       >
         {/* <SettingsIcon style={{ marginLeft: "16px" }} fontSize="large" /> */}
         {/* <AccountCircleIcon style={{ marginLeft: "16px" }} fontSize="large"  /> */}
-        {isAuth && (
+        {isAuth && history.location.pathname === "/orders" && (
           <Button
             color="primary"
             variant="outlined"

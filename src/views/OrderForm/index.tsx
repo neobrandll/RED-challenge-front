@@ -169,15 +169,27 @@ const OrderForm: React.FC = () => {
               )}
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleSubmit(onSubmitForm)}
-            >
-              {id ? "Update" : "Create"}
-            </Button>
+            <Grid container direction="row" justifyContent="space-between">
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.submit}
+                onClick={() => {
+                  history.push("/orders");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleSubmit(onSubmitForm)}
+              >
+                {id ? "Update" : "Create"}
+              </Button>
+            </Grid>
           </div>
         </div>
       </Container>
