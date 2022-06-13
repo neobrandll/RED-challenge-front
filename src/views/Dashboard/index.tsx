@@ -84,7 +84,7 @@ const Dashboard: React.FC = () => {
   return (
     <Page headerTitle={"Dashboard"}>
       <>
-        {orders && !!orders.length && (
+        {orders && (
           <EnhancedTable
             toolbarProps={{
               onCreate: onCreateHandler,
