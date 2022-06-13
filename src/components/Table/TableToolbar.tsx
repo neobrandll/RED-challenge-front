@@ -94,7 +94,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         [classes.highlight]: numSelected > 0,
       })}
     >
-      <Grid container alignItems="center">
+      <Grid container className={classes.container} alignItems="center">
         <Grid item>
           {numSelected > 0 ? (
             <Typography
@@ -117,7 +117,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
           )}
         </Grid>
         <Grid
-          className={clsx({
+          className={clsx(classes.filtersContainer, {
             [classes.hidden]: numSelected > 0,
           })}
           item

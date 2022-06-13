@@ -62,102 +62,108 @@ const TableFilters: React.FC<ITableFilter> = () => {
 
   return (
     <Grid container className={classes.root} alignItems="center" spacing={2}>
-      <Grid item>
-        <Controller
-          control={control}
-          name="orderId"
-          render={({
-            field: { onChange, onBlur, value, name, ref },
-            fieldState: { error },
-            formState,
-          }) => (
-            <TextField
-              variant="outlined"
-              id="searchOrderId"
-              label="Order ID"
-              type="number"
-              error={!!error}
-              helperText={error?.type ? errorMessages?.[error.type] : ""}
-              value={value}
-              name={name}
-              ref={ref}
-              onChange={onChange}
-            />
-          )}
-        />
-      </Grid>
-      <Grid item>
-        <Controller
-          control={control}
-          name="customerName"
-          // rules={{ required: true }}
-          render={({
-            field: { onChange, onBlur, value, name, ref },
-            fieldState: { error },
-            formState,
-          }) => (
-            <TextField
-              variant="outlined"
-              id="searchCustomerName"
-              label="Search Customer"
-              error={!!error}
-              helperText={error?.type ? errorMessages?.[error.type] : ""}
-              value={value}
-              name={name}
-              ref={ref}
-              onChange={onChange}
-            />
-          )}
-        />
-      </Grid>
-      <Grid item>
-        <Controller
-          control={control}
-          name="orderType"
-          // rules={{ required: true }}
-          render={({
-            field: { onChange, onBlur, value, name, ref },
-            fieldState: { error },
-            formState,
-          }) => (
-            <FormControl
-              variant="outlined"
-              className={classNames(classes.formControl, classes.orderType)}
-              required
-            >
-              <InputLabel id="orderTypeSearch">Order Type</InputLabel>
-              <Select
-                labelId="orderTypeSearch"
-                id="demo-simple-select-outlined"
+      <Grid item className={classes.inputsContainer}>
+        <Grid item>
+          <Controller
+            control={control}
+            name="orderId"
+            render={({
+              field: { onChange, onBlur, value, name, ref },
+              fieldState: { error },
+              formState,
+            }) => (
+              <TextField
+                className={classes.input}
+                variant="outlined"
+                id="searchOrderId"
+                label="Order ID"
+                type="number"
+                error={!!error}
+                helperText={error?.type ? errorMessages?.[error.type] : ""}
                 value={value}
-                onChange={onChange}
-                label="order Type"
+                name={name}
                 ref={ref}
+                onChange={onChange}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item>
+          <Controller
+            control={control}
+            name="customerName"
+            // rules={{ required: true }}
+            render={({
+              field: { onChange, onBlur, value, name, ref },
+              fieldState: { error },
+              formState,
+            }) => (
+              <TextField
+                className={classes.input}
+                variant="outlined"
+                id="searchCustomerName"
+                label="Search Customer"
+                error={!!error}
+                helperText={error?.type ? errorMessages?.[error.type] : ""}
+                value={value}
+                name={name}
+                ref={ref}
+                onChange={onChange}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item>
+          <Controller
+            control={control}
+            name="orderType"
+            // rules={{ required: true }}
+            render={({
+              field: { onChange, onBlur, value, name, ref },
+              fieldState: { error },
+              formState,
+            }) => (
+              <FormControl
+                variant="outlined"
+                className={classNames(classes.formControl, classes.input)}
+                required
               >
-                {Object.entries(ORDER_TYPES).map(([key, value]) => (
-                  <MenuItem key={key} value={value}>
-                    {key}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
+                <InputLabel id="orderTypeSearch">Order Type</InputLabel>
+                <Select
+                  className={classes.input}
+                  labelId="orderTypeSearch"
+                  id="demo-simple-select-outlined"
+                  value={value}
+                  onChange={onChange}
+                  label="order Type"
+                  ref={ref}
+                >
+                  {Object.entries(ORDER_TYPES).map(([key, value]) => (
+                    <MenuItem key={key} value={value}>
+                      {key}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        </Grid>
       </Grid>
-
-      <Grid item>
-        <Button onClick={onClearFilters} color="secondary" variant="outlined">
-          Clear
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          variant="contained"
-          color="primary"
-        >
-          Search
-        </Button>
+      <Grid item className={classes.buttonsContainer}>
+        <Grid item>
+          <Button onClick={onClearFilters} color="secondary" variant="outlined">
+            Clear
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            variant="contained"
+            color="primary"
+          >
+            Search
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );
