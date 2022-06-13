@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import store from "./store/store";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import store from "./store/store";
 import theme from "./shared/muiTheme";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 
