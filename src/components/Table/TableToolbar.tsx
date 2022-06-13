@@ -16,16 +16,17 @@ import { IOrderSearch } from "../../models/order.model";
 
 interface EnhancedTableToolbarProps {
   selected: number[];
+  setSelected: (ids: number[]) => void;
   children?: JSX.Element | JSX.Element[];
   onCreate?: () => void;
   onEdit?: (id: number) => void;
-  onDelete?: (id: number[]) => void;
+  onDelete?: (id: number[], afterDelete: () => void) => void;
   onSearch?: (searchQuery: IOrderSearch) => void;
 }
 
 const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
   const classes = useToolbarStyles();
-  const { selected, children, onCreate, onEdit, onDelete } = props;
+  const { selected, children, onCreate, onEdit, onDelete, setSelected } = props;
 
   const numSelected = selected?.length || 0;
 
@@ -55,7 +56,10 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         <Tooltip title="Delete">
           <IconButton
             onClick={() => {
-              onDelete && onDelete(selected);
+              onDelete &&
+                onDelete(selected, () => {
+                  setSelected([]);
+                });
             }}
             aria-label="delete"
           >
@@ -70,7 +74,10 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = (props) => {
         <Tooltip title="Delete">
           <IconButton
             onClick={() => {
-              onDelete && onDelete(selected);
+              onDelete &&
+                onDelete(selected, () => {
+                  setSelected([]);
+                });
             }}
             aria-label="delete"
           >

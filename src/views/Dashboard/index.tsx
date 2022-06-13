@@ -12,6 +12,8 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import Modal from "../../components/Modal";
+import { IModal, IModalProps } from "../../components/Modal/modal-types";
 import Page from "../../components/Page";
 import EnhancedTable from "../../components/Table/Index";
 import { IOrderSearch } from "../../models/order.model";
@@ -32,24 +34,10 @@ const Dashboard: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(getAllOrdersThunk());
-  }, []);
-
-  //   const toolbar = (
-  //     <Grid justifyContent="flex-end" container spacing={3}>
-  //       <Button
-  //         color="primary"
-  //         variant="outlined"
-  //         onClick={() => {
-  //           history.push("/create");
-  //         }}
-  //         className={classes.link}
-  //       >
-  //         Create
-  //       </Button>
-  //     </Grid>
-  //   );
+  const [modal, setModal] = React.useState<IModal>({
+    open: false,
+    title: "",
+  });
 
   const onCreateHandler = () => {
     history.push("/orders/create");
@@ -59,12 +47,37 @@ const Dashboard: React.FC = () => {
     history.push(`/orders/edit/${id}`);
   };
 
-  const onDeleteHandler = (ids: number[]) => {
-    dispatch(deleteOrdersThunk(ids));
-  };
-
   const onSearchHandler = (searchQuery: IOrderSearch) => {
     dispatch(searchOrdersThunk(searchQuery));
+  };
+
+  useEffect(() => {
+    dispatch(getAllOrdersThunk());
+  }, []);
+
+  const closeModal = () => {
+    setModal({
+      open: false,
+      title: "",
+    });
+  };
+
+  const handleOpen = (ids: number[], afterDelete: () => void) => {
+    setModal({
+      open: true,
+      title: "Confirm deletion",
+      onConfirm: () => {
+        dispatch(deleteOrdersThunk(ids)).then(() => {
+          afterDelete();
+          closeModal();
+        });
+      },
+      onCancel: closeModal,
+    });
+  };
+
+  const onDeleteHandler = (ids: number[], afterDelete: () => void) => {
+    handleOpen(ids, afterDelete);
   };
 
   return (
@@ -81,6 +94,7 @@ const Dashboard: React.FC = () => {
             rows={orders}
           />
         )}
+        <Modal modal={modal} />
       </>
     </Page>
   );

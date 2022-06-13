@@ -94,7 +94,7 @@ interface IToolbarProps {
   children?: JSX.Element | JSX.Element[];
   onCreate?: () => void;
   onEdit?: (id: number) => void;
-  onDelete?: (id: number[]) => void;
+  onDelete?: (id: number[], afterDelete: () => void) => void;
   onSearch?: (searchQuery: IOrderSearch) => void;
 }
 
@@ -182,7 +182,11 @@ const EnhancedTable: React.FC<EnhancedTableProps> = (props) => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar {...toolbarProps} selected={selected} />
+        <EnhancedTableToolbar
+          {...toolbarProps}
+          setSelected={setSelected}
+          selected={selected}
+        />
         <TableContainer>
           <Table
             className={classes.table}
