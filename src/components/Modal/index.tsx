@@ -36,9 +36,11 @@ const CustomModal: React.FC<IModalProps> = ({ modal }) => {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">{title}</h2>
+            <h2 className={classes.title} id="transition-modal-title">
+              {title}
+            </h2>
             <p id="transition-modal-description">{description}</p>
-            <Grid container>
+            <Grid container spacing={2}>
               <Grid item>
                 <Button
                   variant="contained"

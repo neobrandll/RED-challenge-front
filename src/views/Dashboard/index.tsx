@@ -63,9 +63,10 @@ const Dashboard: React.FC = () => {
   };
 
   const handleOpen = (ids: number[], afterDelete: () => void) => {
+    const length = ids.length;
     setModal({
       open: true,
-      title: "Confirm deletion",
+      title: `Delete ${length} ${length > 1 ? "items" : "item"} `,
       onConfirm: () => {
         dispatch(deleteOrdersThunk(ids)).then(() => {
           afterDelete();
